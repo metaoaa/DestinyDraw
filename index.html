@@ -1,13 +1,4 @@
 <!DOCTYPE html>
-<!--
-Created using JS Bin
-http://jsbin.com
-
-Copyright (c) 2025 by anonymous (http://jsbin.com/vagevatayi/2/edit)
-
-Released under the MIT license: http://jsbin.mit-license.org
--->
-<meta name="robots" content="noindex">
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
@@ -24,6 +15,11 @@ Released under the MIT license: http://jsbin.mit-license.org
         }
         .card.selected { box-shadow: 0 0 48px 16px #ffd700; outline: 2px solid #ffd700; }
         .card.rolling { box-shadow: 0 0 32px 8px #00eaff; outline: 2px solid #00eaff; }
+        .card:hover:not(.selected):not(.rolling) {
+            box-shadow: 0 0 48px 16px #00eaff, 0 0 8px 2px #fff;
+            outline: 2px solid #00eaff;
+            z-index: 10;
+        }
         .svg-title { position: absolute; left: 0; top: 230px; width: 400px; height: 80px; pointer-events: none; z-index: 3; }
         .card-title-input {
             position: absolute; left: 50px; top: 265px; width: 275px; height: 36px;
