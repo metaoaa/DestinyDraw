@@ -8,45 +8,58 @@
         .cards-container { display: flex; justify-content: center; gap: 32px; }
         .card {
             width: 375px; height: 518px;
-            background: url('https://www.hearthcards.net/temp/3a910297.png') no-repeat center center;
+            background: url('https://raw.githubusercontent.com/metaoaa/DestinyDraw/main/output-onlinepngtools.png') no-repeat center center;
             background-size: 100% 100%; position: relative;
             box-shadow: 0 0 0px #00eaff; border-radius: 16px;
             transition: box-shadow 0.3s, outline 0.3s; cursor: pointer; outline: 2px solid transparent;
+            overflow: hidden;
         }
         .card.selected { box-shadow: 0 0 48px 16px #ffd700; outline: 2px solid #ffd700; }
         .card.rolling { box-shadow: 0 0 32px 8px #00eaff; outline: 2px solid #00eaff; }
-        .card:hover:not(.selected):not(.rolling) {
-            box-shadow: 0 0 48px 16px #00eaff, 0 0 8px 2px #fff;
-            outline: 2px solid #00eaff;
-            z-index: 10;
-        }
-        .svg-title { position: absolute; left: 0; top: 230px; width: 400px; height: 80px; pointer-events: none; z-index: 3; }
+        .svg-title { position: absolute; left: 0; top: 220px; width: 400px; height: 80px; pointer-events: none; z-index: 30; }
         .card-title-input {
             position: absolute; left: 50px; top: 265px; width: 275px; height: 36px;
             background: transparent; border: none; font-size: 22px;
-            color: transparent; /* 讓輸入時不可見 */
-            caret-color: #fff; /* 讓游標可見 */
+            color: transparent;
+            caret-color: #fff;
             font-family: "Noto Sans TC", "微軟正黑體", Arial, sans-serif; text-align: center;
-            outline: none; z-index: 4;
+            outline: none; z-index: 40;
         }
         .card-title-input::placeholder { color: #ffeebb; opacity: 0.7; }
-        .card-desc-bg { position: absolute; top: 350px; left: 38px; width: 300px; height: 90px; background: rgba(30, 30, 30, 0.65); border-radius: 10px; z-index: 1; }
+        .card-desc-bg { position: absolute; top: 350px; left: 38px; width: 300px; height: 90px; background: rgba(30, 30, 30, 0.65); border-radius: 10px; z-index: 35; }
         .card-desc {
             position: absolute; top: 356px; left: 44px; width: 288px; height: 78px;
             background: transparent; border: none; font-size: 20px; text-align: center; color: #fffbe0;
             font-family: "Noto Sans TC", "微軟正黑體", Arial, sans-serif;
-            text-shadow: 2px 2px 8px #000, 0 0 10px #000; resize: none; outline: none; z-index: 2;
+            text-shadow: 2px 2px 8px #000, 0 0 10px #000; resize: none; outline: none; z-index: 40;
         }
         .card-desc::placeholder { color: #ffeebb; opacity: 0.8; text-shadow: 1px 1px 6px #000; }
         .button { margin-top: 30px; font-size: 20px; padding: 12px 36px; border-radius: 8px; border: none; background: #ffd700; color: #333; font-weight: bold; cursor: pointer; }
         .button:hover { background: #ffe066; }
         .result { margin-top: 30px; font-size: 26px; color: #00eaff; font-weight: bold; text-shadow: 1px 1px 6px #000; min-height: 38px;}
+        .card-glow {
+            position: absolute;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 20;
+        }
+        .card:hover .card-glow,
+        .card.rolling .card-glow {
+            opacity: 1;
+        }
+        .card.selected .card-glow {
+            opacity: 0 !important;
+        }
     </style>
 </head>
 <body>
     <h1 style="color:#ffd700;text-shadow:1px 1px 8px #000;">三選一： 風險 或 機會</h1>
     <div class="cards-container">
         <div class="card" onclick="toggleCard(this)">
+            <img class="card-glow" src="https://raw.githubusercontent.com/metaoaa/DestinyDraw/main/output-onlinepngtools.png" alt="發光邊框" />
             <svg class="svg-title" viewBox="0 0 375 80">
                 <defs>
                     <path id="ribbon1" d="M40,60 Q295,-05 325,60" />
@@ -56,11 +69,12 @@
                 </text>
             </svg>
             <input class="card-title-input" maxlength="12" placeholder="輸入選項標題"
-                oninput="updateTitle(1, this.value)">
+                oninput="updateTitle(1, this.value)" onfocus="selectCard(this)">
             <div class="card-desc-bg"></div>
-            <textarea class="card-desc" maxlength="60" placeholder="輸入選項描述"></textarea>
+            <textarea class="card-desc" maxlength="60" placeholder="輸入選項描述" onfocus="selectCard(this)"></textarea>
         </div>
         <div class="card" onclick="toggleCard(this)">
+            <img class="card-glow" src="https://raw.githubusercontent.com/metaoaa/DestinyDraw/main/output-onlinepngtools.png" alt="發光邊框" />
             <svg class="svg-title" viewBox="0 0 375 80">
                 <defs>
                     <path id="ribbon2" d="M40,60 Q295,-05 325,60" />
@@ -70,11 +84,12 @@
                 </text>
             </svg>
             <input class="card-title-input" maxlength="12" placeholder="輸入選項標題"
-                oninput="updateTitle(2, this.value)">
+                oninput="updateTitle(2, this.value)" onfocus="selectCard(this)">
             <div class="card-desc-bg"></div>
-            <textarea class="card-desc" maxlength="60" placeholder="輸入選項描述"></textarea>
+            <textarea class="card-desc" maxlength="60" placeholder="輸入選項描述" onfocus="selectCard(this)"></textarea>
         </div>
         <div class="card" onclick="toggleCard(this)">
+            <img class="card-glow" src="https://raw.githubusercontent.com/metaoaa/DestinyDraw/main/output-onlinepngtools.png" alt="發光邊框" />
             <svg class="svg-title" viewBox="0 0 375 80">
                 <defs>
                     <path id="ribbon3" d="M40,60 Q295,-05 325,60" />
@@ -84,9 +99,9 @@
                 </text>
             </svg>
             <input class="card-title-input" maxlength="12" placeholder="輸入選項標題"
-                oninput="updateTitle(3, this.value)">
+                oninput="updateTitle(3, this.value)" onfocus="selectCard(this)">
             <div class="card-desc-bg"></div>
-            <textarea class="card-desc" maxlength="60" placeholder="輸入選項描述"></textarea>
+            <textarea class="card-desc" maxlength="60" placeholder="輸入選項描述" onfocus="selectCard(this)"></textarea>
         </div>
     </div>
     <button class="button" onclick="chooseOption()" id="rollBtn">隨機命運</button>
@@ -103,6 +118,12 @@
                 card.classList.add('selected');
                 card.querySelector('.card-title-input').focus();
             }
+        }
+        // 新增：輸入框聚焦時自動選中卡片
+        function selectCard(element) {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('selected'));
+            let card = element.closest('.card');
+            if (card) card.classList.add('selected');
         }
         function chooseOption() {
             const cards = document.querySelectorAll('.card');
